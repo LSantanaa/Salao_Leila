@@ -4,25 +4,24 @@
  */
 
 import { Router } from 'express';
-import { 
-  getAllAppointments, 
-  getClientAppointments, 
-  createAppointment, 
-  cancelAppointment 
-} from '../controllers/appointmentController';
+import { getAllAppointments } from '../controllers/appointmentController';
+
 
 const router = Router();
 
 // Buscar todos os agendamentos (somente admin)
 router.get('/', getAllAppointments);
 
-// Buscar agendamentos por cliente
-router.get('/:clientId', getClientAppointments);
+// // Buscar agendamentos por cliente
+// router.get('/:clientId', getClientAppointments);
 
-// Criar um novo agendamento
-router.post('/', createAppointment);
+// // Criar um novo agendamento
+// router.post('/', createAppointment);
 
-// Cancelar um agendamento
-router.delete('/cancel/:appointmentId', cancelAppointment);
+// // Cancelar um agendamento
+// router.delete('/cancel/:appointmentId', cancelAppointment);
+
+// // edita um agendamento
+// router.patch('/edit/:appointmentId')
 
 export default router;

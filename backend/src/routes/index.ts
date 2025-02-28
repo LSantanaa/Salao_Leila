@@ -3,14 +3,14 @@
  * @module routes/index
  */
 
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
 import userRoutes from './userRoutes';
 import appointmentRoutes from './appointmentRoutes';
 
 const router = Router();
 
 // Rota de teste
-router.get('/', (req, res)=>{res.send('ping')})
+router.get('/', (req: Request, res: Response)=>{res.send('ping')})
 
 // Montagem das rotas
 router.use('/users', userRoutes);
