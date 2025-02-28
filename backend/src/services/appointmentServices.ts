@@ -7,14 +7,12 @@ interface CreateAppointmentData {
   useSuggestion?: boolean;
 }
 
-
 export const fetchAllAppointments = async () => {
   return await prisma.appointment.findMany({
     include: { client: true, service: true },
     orderBy: { timeStamp: "asc" },
   });
 };
-
 
 export const fetchUserAppointments = async (userId: number) => {
   return await prisma.appointment.findMany({
@@ -25,8 +23,6 @@ export const fetchUserAppointments = async (userId: number) => {
     orderBy:{timeStamp: 'asc'}
   })
 };
-
-
 
 /**
  * Cria um novo agendamento para um cliente, sugerindo o mesmo dia se já houver um na semana.

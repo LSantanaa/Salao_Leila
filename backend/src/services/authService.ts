@@ -25,7 +25,7 @@ export const createUser = async (name:string, email: string, password: string, r
  * @param email - Email do usuário.
  * @param password - Senha em texto plano.
  */
-export const login = async (email: string, password: string) => {
+export const userLogin = async (email: string, password: string) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !(await bcrypt.compare(password, user.pwd))) {
     throw new Error('Credenciais inválidas');

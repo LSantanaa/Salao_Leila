@@ -4,7 +4,7 @@
  */
 
 import { Request, Response, Router } from 'express';
-import userRoutes from './userRoutes';
+import authRoutes from './authRoutes';
 import appointmentRoutes from './appointmentRoutes';
 
 const router = Router();
@@ -13,7 +13,8 @@ const router = Router();
 router.get('/', (req: Request, res: Response)=>{res.send('ping')})
 
 // Montagem das rotas
-router.use('/users', userRoutes);
+router.use('/auth', authRoutes);
 router.use('/appointments', appointmentRoutes);
+
 
 export default router;

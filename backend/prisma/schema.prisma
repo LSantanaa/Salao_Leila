@@ -13,31 +13,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Client {
+model User {
   id           Int           @id @default(autoincrement())
   name         String
-  email        String
+  email        String        @unique
   pwd          String
+  role         String
   appointments Appointment[]
-}
 
-model Admin {
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String
-  pwd   String
-}
-
-model Appointment {
-  id        Int      @id @default(autoincrement())
-  clientId  Int
-  serviceId Int
-  timeStamp DateTime
-  status    String   @default("Agendado")
-  client    Client   @relation(fields: [clientId], references: [id])
-  service   Service  @relation(fields: [serviceId], references: [id])
-
-  @@map("Appointments")
+  @@map("Users")
 }
 
 model Service {
@@ -45,4 +29,16 @@ model Service {
   name         String
   price        Float
   Appointments Appointment[]
+}
+
+model Appointment {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  serviceId Int
+  timeStamp DateTime
+  status    String   @default("Agendado")
+  client    User     @relation(fields: [userId], references: [id])
+  service   Service  @relation(fields: [serviceId], references: [id])
+
+  @@map("Appointments")
 }
