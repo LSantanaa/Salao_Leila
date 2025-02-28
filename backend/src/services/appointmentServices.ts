@@ -9,7 +9,7 @@ interface CreateAppointmentData {
 
 
 export const fetchAllAppointments = async () => {
-  return await prisma.appointments.findMany({
+  return await prisma.appointment.findMany({
     include: { client: true, service: true },
     orderBy: { timeStamp: "asc" },
   });
@@ -17,7 +17,7 @@ export const fetchAllAppointments = async () => {
 
 
 export const fetchClientAppointments = async (clientId: number) => {
-  return await prisma.appointments.findMany({
+  return await prisma.appointment.findMany({
     where:{
       clientId, 
     },
@@ -45,7 +45,7 @@ export const createNewAppointment = async ({ clientId, serviceId, timeStamp, use
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(endOfWeek.getDate() + 6);
 
-  const existing = await prisma.appointments.findFirst({
+  const existing = await prisma.appointment.findFirst({
     where: { clientId, timeStamp: { gte: startOfWeek, lte: endOfWeek } },
   });
 
@@ -57,7 +57,7 @@ export const createNewAppointment = async ({ clientId, serviceId, timeStamp, use
   // Usa o dia sugerido ou o novo, conforme a escolha
   const finalTimeStamp = useSuggestion && existing ? existing.timeStamp : proposedDate;
   
-  return prisma.appointments.create({
+  return prisma.appointment.create({
     data: { clientId, serviceId, timeStamp: finalTimeStamp, status: 'Agendado' },
   });
 };
