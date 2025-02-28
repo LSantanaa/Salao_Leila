@@ -14,11 +14,11 @@ datasource db {
 }
 
 model Client {
-  id           Int            @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   name         String
   email        String
   pwd          String
-  appointments Appointments[]
+  appointments Appointment[]
 }
 
 model Admin {
@@ -28,7 +28,7 @@ model Admin {
   pwd   String
 }
 
-model Appointments {
+model Appointment {
   id        Int      @id @default(autoincrement())
   clientId  Int
   serviceId Int
@@ -36,11 +36,13 @@ model Appointments {
   status    String   @default("Agendado")
   client    Client   @relation(fields: [clientId], references: [id])
   service   Service  @relation(fields: [serviceId], references: [id])
+
+  @@map("Appointments")
 }
 
 model Service {
-  id           Int            @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   name         String
   price        Float
-  Appointments Appointments[]
+  Appointments Appointment[]
 }
