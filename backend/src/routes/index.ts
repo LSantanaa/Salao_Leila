@@ -3,18 +3,16 @@
  * @module routes/index
  */
 
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
 import authRoutes from './authRoutes';
-import appointmentRoutes from './appointmentRoutes';
+import adminRoutes from './adminRoutes'
+import clientRoutes from './clientRoutes'
 
 const router = Router();
 
-// Rota de teste
-router.get('/', (req: Request, res: Response)=>{res.send('ping')})
-
-// Montagem das rotas
 router.use('/auth', authRoutes);
-router.use('/appointments', appointmentRoutes);
+router.use('/admin', adminRoutes);
+router.use('/client', clientRoutes);
 
 
 export default router;
