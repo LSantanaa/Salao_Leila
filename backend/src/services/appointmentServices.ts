@@ -30,7 +30,7 @@ const getAppointment = async (appointmentId: number, userId?: number) => {
 };
 
 const calculateDaysDiff = (dateTime: Date): number => {
-  return dateTime.getTime() - new Date().getTime() - 1000 * 60 * 60 * 24;
+  return dateTime.getTime() - new Date().getTime() / (1000 * 60 * 60 * 24);
 };
 
 /**
