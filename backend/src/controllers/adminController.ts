@@ -53,7 +53,7 @@ export const getAllAppointments = asyncHandler(
   }
 );
 
-export const editAppointment = asyncHandler(
+export const updateAppointmentAdm = asyncHandler(
   async (req: AuthRequest, res)=>{
     const {id} = req.params
     const {dateTime, status, serviceId} = req.body
@@ -63,7 +63,7 @@ export const editAppointment = asyncHandler(
   }
 )
 
-export const deleteAppointment = asyncHandler(
+export const deleteAppointmentAdm = asyncHandler(
   async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
   const appointment = await deleteAppointmentByAdmin(parseInt(id));
