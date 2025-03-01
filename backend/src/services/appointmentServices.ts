@@ -75,6 +75,10 @@ const alterAppointment = async ({
   }
 };
 
+/**
+ * Busca todos os agendamentos registrados.
+ * @returns Uma lista de objetos de agendamento, incluindo dados do usuário e serviço, ordenada por data.
+ */
 export const fetchAllAppointments = async () => {
   return await prisma.appointment.findMany({
     include: { client: true, service: true },
@@ -82,6 +86,11 @@ export const fetchAllAppointments = async () => {
   });
 };
 
+/**
+ * Busca todos os agendamentos de um usuário específico.
+ * @param userId - O ID do usuário cujos agendamentos serão buscados.
+ * @returns Uma lista de objetos de agendamento do usuário, incluindo dados do usuário e serviço, ordenada por data.
+ */
 export const fetchUserAppointments = async (userId: number) => {
   return await prisma.appointment.findMany({
     where: { userId },
@@ -92,7 +101,7 @@ export const fetchUserAppointments = async (userId: number) => {
 
 /**
  * Cria um novo agendamento para um cliente, sugerindo o mesmo dia se já houver um na semana.
- * @param options - Objeto de opções contendo action, appointmentId, userId e dateTime/status, serviceId opcionais.
+ * @param options - Objeto de opções contendo action, appointmentId, userId, e dateTime/status/serviceId opcionais.
  * @param options.userId - O ID do cliente que está agendando.
  * @param options.serviceId - O ID do serviço a ser agendado.
  * @param options.dateTime - A data e hora propostas para o agendamento (formato ISO string).
@@ -118,21 +127,19 @@ export const createNewAppointment = async ({
   // Se há agendamento na semana e ainda não foi decidido
   if (existing && useSuggestion === undefined) {
     return {
-      suggestion: `Agendamento em ${existing.dateTime
-        .getDate()
-        .toLocaleString("pt-br")}. Deseja usar este dia?`,
+      suggestion: `Agendamento em ${existing.dateTime.toLocaleString("pt-br")}. Deseja usar este dia?`,
       existingId: existing.id,
     };
   }
 
   // Usa o dia sugerido ou o novo, conforme a escolha
-  const finalDateTime =
-    useSuggestion && existing ? existing.dateTime : proposedDate;
+  const finalDateTime = useSuggestion && existing ? existing.dateTime : proposedDate;
 
   return prisma.appointment.create({
     data: { userId, serviceId, dateTime: finalDateTime, status: "Pendente" },
   });
 };
+
 
 /**
  * Deleta o agendamento se estiver no período permitido.
@@ -147,6 +154,7 @@ export const deleteAppointment = async (
 ) => {
   return alterAppointment({ action: "delete", appointmentId, userId });
 };
+
 
 /**
  * Altera o agendamento (data, serviço ou status) do seu próprio
@@ -176,6 +184,7 @@ export const updateAppointment = async ({
     serviceId,
   });
 };
+
 
 /**
  * Altera o agendamento (data, serviço ou status) sem restrições (admin).
