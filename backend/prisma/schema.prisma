@@ -35,7 +35,7 @@ model Appointment {
   id        Int      @id @default(autoincrement())
   userId    Int
   serviceId Int
-  timeStamp DateTime
+  dateTime  DateTime
   status    String   @default("Agendado")
   client    User     @relation(fields: [userId], references: [id])
   service   Service  @relation(fields: [serviceId], references: [id])
