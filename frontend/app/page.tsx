@@ -1,13 +1,29 @@
+"use client";
+import { useState } from "react";
+import LoginForm from "@/components/auth/LoginForm";
+import RegisterForm from "@/components/auth/RegisterForm";
 
-export default function Home() {
+import {  Dancing_Script, Montserrat } from "next/font/google";
+const dancingScript = Dancing_Script({subsets:['latin'], weight:["400","700"]})
+const montserrat = Montserrat({subsets:['latin'], weight:["400","700"]})
+
+export default function AuthPage() {
+  const [isLogin, setIsLogin] = useState(true);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-       
-      </footer>
-    </div>
+    <main className={`${montserrat.className} flex flex-col items-center text-center justify-center min-h-screen bg-gradient-to-r from-pink-300 to-purple-400 p-4`}>
+      <h1 className={`text-4xl  md:text-5xl font-bold ${dancingScript.className}  text-rose-950`}>Bem Vindo ao Salão da Leila</h1>
+      <p className="m-4 text-2xl text-rose-900">Faça login para continuar</p>
+      <div className="w-full max-w-md p-6 bg-white shadow-lg rounded-2xl">
+        <h2 className="text-2xl font-semibold text-center text-pink-800 mb-4">
+          {isLogin ? "Entrar" : "Criar Conta"}
+        </h2>
+        {isLogin ? (
+          <LoginForm toggleForm={() => setIsLogin(false)} />
+        ) : (
+          <RegisterForm toggleForm={() => setIsLogin(true)} />
+        )}
+      </div>
+    </main>
   );
 }
