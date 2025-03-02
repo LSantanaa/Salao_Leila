@@ -16,12 +16,15 @@ interface AuthRequest extends Request {
 export const registerClient = asyncHandler(async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
-    
     res.status(400);
     throw new Error('Campos obrigatórios faltando');
   }
-  const user = await createUser(name, email, password, 'client');
-  res.status(201).json(user);
+  const result = await createUser(name, email, password, 'client');
+  if(result.success){
+     res.status(201).json(result.data)
+  }else{
+     res.status(409).json({error: result.error})
+  }
 });
 
 
@@ -54,7 +57,12 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
   if(!email || !password){
     res.status(400);
     throw new Error("Campos email e password são obrigatórios para logar.")
+  }else{
+    const result = await userLogin(email, password);
+    if(result.success){
+      res.status(200).json(result.data)
+    }else{
+      res.status(401).json({error: result.error})
+    }
   }
-  const { token, role } = await userLogin(email, password);
-  res.json({ token, role });
 });
