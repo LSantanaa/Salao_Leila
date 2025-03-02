@@ -236,5 +236,11 @@ export const updateAppointmentByAdmin = async ({
  * @throws {Error} Se o agendamento não for encontrado.
  */
 export const deleteAppointmentByAdmin = async (appointmentId: number) => {
-  return prisma.appointment.delete({ where: { id: appointmentId } });
+  const appointment = await prisma.appointment.findUnique({where: {id: appointmentId}})
+  
+  if(!appointment){
+    throw new Error("Agendamento não encontrado.")
+  }
+    return prisma.appointment.delete({ where: { id: appointmentId } });
+  
 };
