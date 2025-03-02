@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import {  useState } from "react";
 import LoginForm from "@/components/auth/LoginForm";
 import RegisterForm from "@/components/auth/RegisterForm";
 
@@ -8,7 +8,8 @@ const dancingScript = Dancing_Script({subsets:['latin'], weight:["400","700"]})
 const montserrat = Montserrat({subsets:['latin'], weight:["400","700"]})
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(true)
+
 
   return (
     <main className={`${montserrat.className} flex flex-col items-center text-center justify-center min-h-screen bg-gradient-to-r from-pink-300 to-purple-400 p-4`}>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import { AuthProvider } from "@/providers/authProvider";
 
 export const metadata: Metadata = {
   title: "Teste DSIN",
@@ -14,10 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body
-        className={`antialiased `}
-      >
-        {children}
+      <body className={`antialiased `}>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
