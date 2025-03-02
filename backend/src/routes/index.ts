@@ -5,8 +5,8 @@
 
 import { Router } from 'express';
 import authRoutes from './authRoutes';
-import adminRoutes from './adminRoutes'
-import clientRoutes from './clientRoutes'
+import adminRoutes from './adminRoutes';
+import clientRoutes from './clientRoutes';
 
 const router = Router();
 
