@@ -20,7 +20,18 @@ async function seed() {
     },
   });
 
+  const services = await prisma.service.createMany({
+    data:[
+      {name: "Corte Simples", price: 50.00},
+      {name: "Corte especial", price: 70.00},
+      {name: "Tintura", price: 90.00},
+      {name: "Progressiva", price: 130.00},
+      {name: "Hidratação", price: 50.00},
+    ]
+  })
+
   console.log('Admin criado:', admin);
+  console.log('Serviços criados:', services);
 }
 
 seed()
