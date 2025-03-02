@@ -48,6 +48,8 @@ node_modules/
 backend/dev.db-shm
 backend/dev.db-wal
 backend/.env
+backend/prisma/db/database.db
+backend/dist
 
 # Frontend
 frontend/build/
