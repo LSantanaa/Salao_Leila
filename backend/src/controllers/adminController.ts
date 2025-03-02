@@ -30,8 +30,13 @@ export const editSalonService = asyncHandler(
 export const delSalonService = asyncHandler(
   async(req: AuthRequest, res:Response)=>{
     const {id} = req.params;
-    const deletedService = await deleteSalonService(parseInt(id))
-    res.json(deletedService)
+    const result = await deleteSalonService(parseInt(id))
+    if(result.success){
+      res.json({message: 'Serviço excluído com sucesso', data:result.data})
+    }else{
+      res.status(400).json({error: result.error})
+    }
+    
   }
 )
 
