@@ -54,3 +54,4 @@ backend/dist
 # Frontend
 frontend/build/
 frontend/.env
+frontend/.next
