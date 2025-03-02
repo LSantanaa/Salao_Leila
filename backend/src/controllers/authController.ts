@@ -41,8 +41,12 @@ export const registerAdmin = asyncHandler(async (req: AuthRequest, res: Response
     res.status(400);
     throw new Error('Campos obrigatórios faltando');
   }
-  const user = await createUser(name, email, password, 'admin');
-  res.status(201).json(user);
+  const result = await createUser(name, email, password, 'admin');
+  if(result.success){
+    res.status(201).json(result.data);
+  }else{
+    res.status(409).json({error: result.error})
+  }
 });
 
 /**
@@ -59,6 +63,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("Campos email e password são obrigatórios para logar.")
   }else{
     const result = await userLogin(email, password);
+    console.log(result)
     if(result.success){
       res.status(200).json(result.data)
     }else{
