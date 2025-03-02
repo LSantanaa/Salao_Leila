@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import {
   createNewAppointment,
   deleteAppointment,
-  fetchAllAppointments,
   fetchUserAppointments,
   updateAppointment,
 } from "../services/appointmentServices";
 import { asyncHandler } from "../lib/asyncHandler";
+import { fetchAllSalonServices } from "../services/salonService";
 
 interface AuthRequest extends Request {
   user?: { id: number; role: string };
@@ -20,6 +20,13 @@ export const getUserAppointments = asyncHandler(
     res.json(clientAppointments);
   }
 );
+
+export const getAllSalonServicesClient = asyncHandler(
+  async(req:AuthRequest, res: Response)=>{
+    const services = await fetchAllSalonServices();
+    res.json(services)
+  }
+)
 
 
 export const createAppointment = asyncHandler(
@@ -42,7 +49,7 @@ export const createAppointment = asyncHandler(
     if ("suggestion" in result) {
       res.status(200).json(result);
     }else{
-      res.status(201).json(res);
+      res.status(201).json(result);
     }
   }
 );
@@ -51,8 +58,12 @@ export const createAppointment = asyncHandler(
 export const deleteAppointmentClient = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { appointmentId } = req.params;
   const userId = req.user!.id;
-  await deleteAppointment(parseInt(appointmentId), userId);
-  res.json({ message: 'Agendamento excluído.' });
+  const result = await deleteAppointment(parseInt(appointmentId), userId);
+  if(result.success){
+    res.json({message: "Agendamento cancelado", data: result.data})
+  }else{
+    res.status(400).json({ error: result.error });
+  }
 });
 
 export const updateAppointmentClient = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -60,6 +71,12 @@ export const updateAppointmentClient = asyncHandler(async (req: AuthRequest, res
   const { dateTime, serviceId } = req.body;
   const userId = req.user!.id;
   const editAppointment = {appointmentId:parseInt(appointmentId),userId, dateTime, serviceId: parseInt(serviceId)}
-  const appointment = await updateAppointment(editAppointment);
-  res.json(appointment);
+  const result = await updateAppointment(editAppointment);
+  
+  if(result.success){
+    res.json(result.data);
+  }else{
+    res.status(400).json({erro: result.error})
+  }
+
 });
