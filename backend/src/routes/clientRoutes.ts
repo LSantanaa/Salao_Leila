@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/auth';
 import { createAppointment, deleteAppointmentClient, getAllSalonServicesClient, getUserAppointments, updateAppointmentClient } from '../controllers/clientController';
-import { deleteAppointment } from '../services/appointmentServices';
 
 const router = Router();
 
