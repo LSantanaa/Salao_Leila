@@ -23,7 +23,7 @@ export const createUser = async (name:string, email: string, password: string, r
 
     const token = jwt.sign({id:user.id,role:user.role}, JWT_SECRET, {expiresIn:'2h'});
 
-    return {success: true, data: {token, role: user.role, name:user.name}}
+    return {success: true, data: {token, role: user.role, name:user.name, id: user.id}}
 };
 
 /**
@@ -38,5 +38,5 @@ export const userLogin = async (email: string, password: string) => {
     return {success: false, error: "Credenciais inválidas"};
   }
   const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '2h' });
-  return { success: true, data:{token, role: user.role, name: user.name} };
+  return { success: true, data:{token, role: user.role, name: user.name, id: user.id} };
 };
