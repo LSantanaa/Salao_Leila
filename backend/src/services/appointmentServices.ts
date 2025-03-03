@@ -63,10 +63,10 @@ const alterAppointment = async ({
   }
 
   if (action === "delete") {
-    const deleted = prisma.appointment.delete({ where: { id: appointmentId } });
+    const deleted = await prisma.appointment.delete({ where: { id: appointmentId } });
     return { success: true, data: deleted };
   } else {
-    const updated = prisma.appointment.update({
+    const updated = await prisma.appointment.update({
       where: { id: appointmentId },
       data: {
         dateTime: dateTime ? new Date(dateTime) : appointment.dateTime,
@@ -74,9 +74,9 @@ const alterAppointment = async ({
         serviceId,
       },
     });
-
     return {success: true, data:updated}
   }
+
 };
 
 /**
@@ -85,8 +85,9 @@ const alterAppointment = async ({
  */
 export const fetchAllAppointments = async () => {
   return await prisma.appointment.findMany({
+    omit:{userId:true, serviceId: true},
     include: {
-      client: { omit: { email: true, pwd: true, role: true } },
+      user: { omit: { email: true, pwd: true, role: true } },
       service: true,
     },
     orderBy: { dateTime: "asc" },
@@ -101,8 +102,9 @@ export const fetchAllAppointments = async () => {
 export const fetchUserAppointments = async (userId: number) => {
   return await prisma.appointment.findMany({
     where: { userId },
+    omit:{userId:true, serviceId: true},
     include: {
-      client: { omit: { email: true, pwd: true, role: true } },
+      user: { omit: { email: true, pwd: true, role: true, } },
       service: true,
     },
     orderBy: { dateTime: "asc" },
@@ -145,6 +147,7 @@ export const createNewAppointment = async ({
     }
     const suggestionDate = existing.dateTime.toISOString().split('T')[0]
     return {
+      success:false,
       suggestion: `Encontrei um agendamento no dia ${suggestionDate.split('-').reverse().join('/')}. Deseja agendar para o mesmo dia?`,
       existingId: existing.id,
     };
@@ -153,7 +156,7 @@ export const createNewAppointment = async ({
   // Usa o dia sugerido ou o novo, conforme a escolha
   const finalDateTime = useSuggestion && existing ? existing.dateTime : proposedDate;
 
-  return prisma.appointment.create({
+  return await prisma.appointment.create({
     data: { userId, serviceId, dateTime: finalDateTime, status: "Pendente" },
   });
 };
