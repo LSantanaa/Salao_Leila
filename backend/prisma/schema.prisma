@@ -37,7 +37,7 @@ model Appointment {
   serviceId Int
   dateTime  DateTime
   status    String   @default("Agendado")
-  client    User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
   service   Service  @relation(fields: [serviceId], references: [id])
 
   @@map("Appointments")
