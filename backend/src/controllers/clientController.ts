@@ -60,7 +60,7 @@ export const deleteAppointmentClient = asyncHandler(async (req: AuthRequest, res
   const userId = req.user!.id;
   const result = await deleteAppointment(parseInt(appointmentId), userId);
   if(result.success){
-    res.json({message: "Agendamento cancelado", data: result.data})
+    res.json({success: true, message: "Agendamento cancelado", data: result.data})
   }else{
     res.status(400).json({ error: result.error });
   }
@@ -68,15 +68,15 @@ export const deleteAppointmentClient = asyncHandler(async (req: AuthRequest, res
 
 export const updateAppointmentClient = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { appointmentId } = req.params;
-  const { dateTime, serviceId } = req.body;
+  const { dateTime, serviceId, status } = req.body;
   const userId = req.user!.id;
-  const editAppointment = {appointmentId:parseInt(appointmentId),userId, dateTime, serviceId: parseInt(serviceId)}
+  const editAppointment = {appointmentId:parseInt(appointmentId),userId, dateTime, serviceId: parseInt(serviceId), status}
   const result = await updateAppointment(editAppointment);
   
   if(result.success){
-    res.json(result.data);
+    res.json(result);
   }else{
-    res.status(400).json({erro: result.error})
+    res.status(400).json(result)
   }
 
 });
