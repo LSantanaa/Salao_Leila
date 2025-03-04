@@ -151,6 +151,7 @@ export default function AppointmentCard({appointment,}: {appointment: Appointmen
               {appointment.status}
             </b>
           </p>
+          {user?.role === "admin" && <p className="text-rose-900">{appointment.user?.name}</p>}
           {error && <p className="text-sm text-rose-600 mt-1">{error}</p>}
           <div className="relative text-sm flex  gap-2 text-rose-200">
             <button
