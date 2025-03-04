@@ -28,7 +28,7 @@ Antes de começar, certifique-se de ter instalado:
 Para verificar se o Node.js está instalado, execute:
 ```sh
 node -v
-
+```
 
 ## 🛠️ Configuração do Ambiente
 
