@@ -77,12 +77,15 @@ cd Salao_Leila
        - name: "Tintura", price: 90.00,
        - name: "Progressiva", price: 130.00,
        - name: "Hidratação", price: 50.00
-        
-6. Inicie o servidor:
+6. Faça build do servidor:
+ ```sh
+  npm run build
+ ```     
+7. Inicie o servidor:
    ```sh
-   npm start
+   npm run start
    ```
-7. O backend estará rodando em:
+8. O backend estará rodando em:
    ```
    http://localhost:8080
    ```
