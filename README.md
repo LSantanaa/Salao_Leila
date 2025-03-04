@@ -60,17 +60,24 @@ cd Salao_Leila
    ```sh
    npm run migrate
    ```
-5. Popule o banco de dados (opcional, mas recomendado para testes):
+5. Popule o banco de dados (Obrigatório para inserir administrador e serviços):
    ```sh
    npm run seed
    ```
-   - O comando **seed** insere um login de **admin** e um de **cliente** para testes:
+   - O comando **seed** insere um login de **admin** e um de **cliente** para testes, além de **5 serviços** para o salão:
      - **Admin:**
        - Email: `admin@salao.com`
        - Senha: `admin123`
      - **Cliente:**
        - Email: `karen@cliente.com`
        - Senha: `cliente123`
+     - **Serviços**
+       - name: "Corte Simples", price: 50.00,
+       - name: "Corte Especial", price: 70.00,
+       - name: "Tintura", price: 90.00,
+       - name: "Progressiva", price: 130.00,
+       - name: "Hidratação", price: 50.00
+        
 6. Inicie o servidor:
    ```sh
    npm start
