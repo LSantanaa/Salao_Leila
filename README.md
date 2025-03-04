@@ -53,7 +53,7 @@ cd Salao_Leila
 3. Configure as variáveis de ambiente:
    - Crie um arquivo **.env** na raiz do backend e adicione:
      ```env
-     PORT=5000
+     PORT=8080
      DATABASE_URL="file:./db/database.db"
      ```
 4. Execute as migrações do banco de dados:
@@ -84,7 +84,7 @@ cd Salao_Leila
    ```
 7. O backend estará rodando em:
    ```
-   http://localhost:5000
+   http://localhost:8080
    ```
 
 ---
