@@ -54,7 +54,7 @@ export const getAllSalonServices = asyncHandler(
 export const getAllAppointments = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const appointments = await fetchAllAppointments();
-    res.json({agendamentos: appointments});
+    res.json(appointments);
   }
 );
 
@@ -64,7 +64,11 @@ export const updateAppointmentAdm = asyncHandler(
     const {dateTime, status, serviceId} = req.body
     const editAppointment = {appointmentId:parseInt(id), dateTime, status, serviceId}
     const appointment = await updateAppointmentByAdmin(editAppointment)
-    res.json(appointment)
+    if(appointment.success){
+      res.json(appointment.data)
+    }else{
+      res.status(400).json({error: "Alteração não realizada"})
+    }
   }
 )
 
@@ -72,5 +76,7 @@ export const deleteAppointmentAdm = asyncHandler(
   async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
   const appointment = await deleteAppointmentByAdmin(parseInt(id));
-  res.json({ message: "Agendamento excluído pelo administrador", appointment });
+  if(appointment.success){
+    res.send(appointment.deleted)
+  }
 });

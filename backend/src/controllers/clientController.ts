@@ -45,11 +45,11 @@ export const createAppointment = asyncHandler(
       dateTime,
       useSuggestion,
     });
-
-    if ("suggestion" in result) {
-      res.status(200).json(result);
-    }else{
-      res.status(201).json(result);
+    
+    if("suggestion" in result) {
+      res.status(202).json(result);
+    }else if(result.success){
+      res.status(201).json(result.data);
     }
   }
 );
@@ -60,7 +60,7 @@ export const deleteAppointmentClient = asyncHandler(async (req: AuthRequest, res
   const userId = req.user!.id;
   const result = await deleteAppointment(parseInt(appointmentId), userId);
   if(result.success){
-    res.json({success: true, message: "Agendamento cancelado", data: result.data})
+    res.json(result.deleted)
   }else{
     res.status(400).json({ error: result.error });
   }
@@ -74,7 +74,7 @@ export const updateAppointmentClient = asyncHandler(async (req: AuthRequest, res
   const result = await updateAppointment(editAppointment);
   
   if(result.success){
-    res.json(result);
+    res.json(result.data);
   }else{
     res.status(400).json(result)
   }
