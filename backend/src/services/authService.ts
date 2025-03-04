@@ -21,7 +21,7 @@ export const createUser = async (name:string, email: string, password: string, r
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({data: { name,email,pwd: hashedPassword, role }, });
 
-    const token = jwt.sign({id:user.id,role:user.role}, JWT_SECRET, {expiresIn:'2h'});
+    const token = jwt.sign({id:user.id,role:user.role}, JWT_SECRET, {expiresIn:'5h'});
 
     return {success: true, data: {token, role: user.role, name:user.name, id: user.id}}
 };

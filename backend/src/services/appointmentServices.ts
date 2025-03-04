@@ -54,17 +54,19 @@ const alterAppointment = async ({
 }: AppointmentOptions) => {
   const appointment = await getAppointment(appointmentId, userId);
   const diffDays = calculateDaysDiff(appointment.dateTime);
- 
+
   if (diffDays < 2) {
     const errorMessage = `${
       action === "delete" ? "Cancelamentos" : "Alterações"
     } somente são permitidos com até 2 dias de antecedência. Entre em contato.`;
-    return {success: false, error: errorMessage}
+    return { success: false, error: errorMessage };
   }
 
   if (action === "delete") {
-    const deleted = await prisma.appointment.delete({ where: { id: appointmentId } });
-    return { success: true, data: deleted };
+    const deleted = await prisma.appointment.delete({
+      where: { id: appointmentId },
+    });
+    return { success: true, deleted };
   } else {
     const updated = await prisma.appointment.update({
       where: { id: appointmentId },
@@ -73,10 +75,14 @@ const alterAppointment = async ({
         status,
         serviceId,
       },
+      omit: { userId: true, serviceId: true },
+      include: {
+        user: { omit: { email: true, pwd: true, role: true } },
+        service: true,
+      },
     });
-    return {success: true, data:updated}
+    return { success: true, data: updated };
   }
-
 };
 
 /**
@@ -85,7 +91,7 @@ const alterAppointment = async ({
  */
 export const fetchAllAppointments = async () => {
   return await prisma.appointment.findMany({
-    omit:{userId:true, serviceId: true},
+    omit: { userId: true, serviceId: true },
     include: {
       user: { omit: { email: true, pwd: true, role: true } },
       service: true,
@@ -102,9 +108,9 @@ export const fetchAllAppointments = async () => {
 export const fetchUserAppointments = async (userId: number) => {
   return await prisma.appointment.findMany({
     where: { userId },
-    omit:{userId:true, serviceId: true},
+    omit: { userId: true, serviceId: true },
     include: {
-      user: { omit: { email: true, pwd: true, role: true, } },
+      user: { omit: { email: true, pwd: true, role: true } },
       service: true,
     },
     orderBy: { dateTime: "asc" },
@@ -140,15 +146,26 @@ export const createNewAppointment = async ({
   if (existing && useSuggestion === undefined) {
     const existingDay = existing.dateTime.toISOString().split("T")[0];
     const proposedDay = proposedDate.toISOString().split("T")[0];
+
     if (proposedDay === existingDay) {
-      return prisma.appointment.create({
-        data: { userId, serviceId, dateTime: proposedDate, status: "Pendente" },
+      const res = await prisma.appointment.create({
+        data: { userId, serviceId, dateTime: proposedDate, status: "pendente" },
+        omit: { userId: true, serviceId: true },
+        include: {
+          user: { omit: { email: true, pwd: true, role: true } },
+          service: true,
+        },
       });
+      return {success: true, data: res}
     }
-    const suggestionDate = existing.dateTime.toISOString().split('T')[0]
+
+    const suggestionDate = existing.dateTime.toISOString().split("T")[0];
     return {
-      success:false,
-      suggestion: `Encontrei um agendamento no dia ${suggestionDate.split('-').reverse().join('/')}. Deseja agendar para o mesmo dia?`,
+      success: false,
+      suggestion: `Encontrei um agendamento no dia ${suggestionDate
+        .split("-")
+        .reverse()
+        .join("/")}. Deseja agendar para o mesmo dia?`,
       existingId: existing.id,
     };
   }
@@ -156,9 +173,16 @@ export const createNewAppointment = async ({
   // Usa o dia sugerido ou o novo, conforme a escolha
   const finalDateTime = useSuggestion && existing ? existing.dateTime : proposedDate;
 
-  return await prisma.appointment.create({
-    data: { userId, serviceId, dateTime: finalDateTime, status: "Pendente" },
+  const res = await prisma.appointment.create({
+    data: { userId, serviceId, dateTime: finalDateTime, status: "pendente" },
+    omit: { userId: true, serviceId: true },
+    include: {
+      user: { omit: { email: true, pwd: true, role: true } },
+      service: true,
+    },
   });
+
+  return { success: true, data: res };
 };
 
 /**
@@ -222,14 +246,21 @@ export const updateAppointmentByAdmin = async ({
 }: Omit<AppointmentOptions, "action" | "userId">) => {
   const appointment = await getAppointment(appointmentId);
 
-  return prisma.appointment.update({
+  const updated = await prisma.appointment.update({
     where: { id: appointmentId },
     data: {
       dateTime: dateTime ? new Date(dateTime) : appointment.dateTime,
       status,
       serviceId,
     },
+    omit: { userId: true, serviceId: true },
+    include: {
+      user: { omit: { email: true, pwd: true, role: true } },
+      service: true,
+    },
   });
+
+  return { success: true, data: updated };
 };
 
 /**
@@ -239,11 +270,13 @@ export const updateAppointmentByAdmin = async ({
  * @throws {Error} Se o agendamento não for encontrado.
  */
 export const deleteAppointmentByAdmin = async (appointmentId: number) => {
-  const appointment = await prisma.appointment.findUnique({where: {id: appointmentId}})
-  
-  if(!appointment){
-    throw new Error("Agendamento não encontrado.")
+  const appointment = await prisma.appointment.findUnique({
+    where: { id: appointmentId },
+  });
+
+  if (!appointment) {
+    throw new Error("Agendamento não encontrado.");
   }
-    return prisma.appointment.delete({ where: { id: appointmentId } });
-  
+  const deleted = await  prisma.appointment.delete({ where: { id: appointmentId } });
+  return { success: true, deleted };
 };
