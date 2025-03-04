@@ -6,6 +6,7 @@ import { api } from "@/lib/api";
 
 type User = {
   name?: string;
+  id: number;
   email: string;
   role: "client" | "admin";
 };
@@ -20,8 +21,8 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Tempo de expiração do token: 2 horas (em milissegundos)
-const TOKEN_EXPIRATION = 60 * 60 * 2000;
+// Tempo de expiração do token: 6 horas (em milissegundos)
+const TOKEN_EXPIRATION = 60 * 60 * 6000;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedRole = localStorage.getItem("role");
+    const storedId = localStorage.getItem("id");
     const storedEmail = localStorage.getItem("email");
     const storedName = localStorage.getItem("name") || undefined;
     const storedExpiresAt = localStorage.getItem("expiresAt");
@@ -41,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (now > Number(storedExpiresAt)) {
         logout();
       } else {
-        const restoredUser = { email: storedEmail, name: storedName, role: storedRole as "client" | "admin" };
+        const restoredUser = { id:Number(storedId), email: storedEmail, name: storedName, role: storedRole as "client" | "admin" };
         setUser(restoredUser);
         setToken(storedToken);
         router.push(restoredUser.role === "admin" ? "/admin/dashboard" : "/dashboard");
@@ -57,6 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("token", authToken);
     localStorage.setItem("role", userData.role);
     localStorage.setItem("email", userData.email);
+    localStorage.setItem("id", String(userData.id));
     if (userData.name) localStorage.setItem("name", userData.name);
     localStorage.setItem("expiresAt", expiresAt.toString());
     router.push(redirectPath);
@@ -73,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const { data } = result;
-    const userData: User = { email, name: data.name, role: data.role };
+    const userData: User = { id:data.id, email, name: data.name, role: data.role };
     const authToken = data.token;
     const redirectPath = userData.role === "admin" ? "/admin/dashboard" : "/dashboard";
 
@@ -91,7 +94,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const { data } = result;
-    const userData: User = { email, name: data.name || name, role: data.role };
+    const userData: User = {id:data.id, email, name: data.name, role:data.role };
     const authToken = data.token;
 
     handleAuthSuccess(userData, authToken, "/dashboard");

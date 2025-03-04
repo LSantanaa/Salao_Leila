@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import Input from "../ui/Input";
-import Button from "../ui/Button";
+import Input from "../formComponents/Input";
+import Button from "../formComponents/Button";
 import { useAuth } from "@/providers/authProvider";
 
 export default function RegisterForm({ toggleForm }: { toggleForm: () => void }) {

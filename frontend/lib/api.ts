@@ -15,6 +15,9 @@ export const api = async (endpoint: string, options: RequestInit = {}) => {
 
     const data = await res.json();
     if (res.ok) {
+      if(res.status === 202){
+        return{success: false, data}
+      }
       return { success: true, data };
     } else {
       return { success: false, error: data.error || "Erro desconhecido" };

@@ -1,7 +1,7 @@
 "use client";
 import {  useState } from "react";
-import Input from "../ui/Input";
-import Button from "../ui/Button";
+import Input from "../formComponents/Input";
+import Button from "../formComponents/Button";
 import { useAuth } from "@/providers/authProvider";
 
 
@@ -45,7 +45,7 @@ export default function LoginForm({ toggleForm }: { toggleForm: () => void }) {
       {error && (
         <p className="text-sm my-2 text-red-600">{error}</p> // Exibe o erro abaixo dos campos
       )}
-      <Button text="Entrar" type="submit" />
+      <Button text="Entrar" type="submit"/>
       <p className="text-center text-sm text-gray-600">
         Não tem uma conta?{" "}
         <button
