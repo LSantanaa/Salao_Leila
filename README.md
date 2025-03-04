@@ -28,7 +28,7 @@ Antes de começar, certifique-se de ter instalado:
 Para verificar se o Node.js está instalado, execute:
 ```sh
 node -v
-
+```
 
 ## 🛠️ Configuração do Ambiente
 
@@ -53,7 +53,7 @@ cd Salao_Leila
 3. Configure as variáveis de ambiente:
    - Crie um arquivo **.env** na raiz do backend e adicione:
      ```env
-     PORT=5000
+     PORT=8080
      DATABASE_URL="file:./db/database.db"
      ```
 4. Execute as migrações do banco de dados:
@@ -77,14 +77,17 @@ cd Salao_Leila
        - name: "Tintura", price: 90.00,
        - name: "Progressiva", price: 130.00,
        - name: "Hidratação", price: 50.00
-        
-6. Inicie o servidor:
+6. Faça build do servidor:
+ ```sh
+  npm run build
+ ```     
+7. Inicie o servidor:
    ```sh
-   npm start
+   npm run start
    ```
-7. O backend estará rodando em:
+8. O backend estará rodando em:
    ```
-   http://localhost:5000
+   http://localhost:8080
    ```
 
 ---
